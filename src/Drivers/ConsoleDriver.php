@@ -104,17 +104,29 @@ class ConsoleDriver implements DriverInterface
      */
     public function isBot()
     {
-        return strpos($this->message, 'BotMan: ') === 0;
+        return str_starts_with($this->message, 'BotMan: ');
     }
 
     /**
      * Send a typing indicator.
      * @param IncomingMessage $matchingMessage
-     * @return mixed
+     * @return void
      */
     public function types(IncomingMessage $matchingMessage)
     {
         $this->client->write(self::BOT_NAME.': ...'.PHP_EOL);
+    }
+
+    /**
+     * Send a typing indicator and wait for the given amount of seconds.
+     * @param IncomingMessage $matchingMessage
+     * @param float $seconds
+     * @return void
+     */
+    public function typesAndWaits(IncomingMessage $matchingMessage, float $seconds)
+    {
+        $this->types($matchingMessage);
+        usleep($seconds * 1000000);
     }
 
     /**

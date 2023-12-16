@@ -7,7 +7,7 @@ use BotMan\BotMan\Cache\ArrayCache;
 use BotMan\Tinker\Drivers\ConsoleDriver;
 use Clue\React\Stdio\Stdio;
 use Illuminate\Console\Command;
-use React\EventLoop\Factory;
+use React\EventLoop\Loop;
 
 class Tinker extends Command
 {
@@ -34,7 +34,7 @@ class Tinker extends Command
     {
         /** @var \Illuminate\Foundation\Application $app */
         $app = app('app');
-        $loop = Factory::create();
+        $loop = Loop::get();
 
         $app->singleton('botman', function ($app) use ($loop) {
             $config = config('services.botman', []);
@@ -54,6 +54,10 @@ class Tinker extends Command
 
         if (file_exists('routes/botman.php')) {
             require base_path('routes/botman.php');
+        }
+
+        if(file_exists('routes/botman/tinker.php')) {
+            require base_path('routes/botman/tinker.php');
         }
 
         $loop->run();
